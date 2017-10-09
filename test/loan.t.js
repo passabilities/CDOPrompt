@@ -1,13 +1,12 @@
 import _ from 'lodash';
-import uuidV4 from 'uuid/V4';
-import {web3, util} from './init.js';
-import {PERIOD_TYPE, LOAN_STATE, DEFAULT_TX_PARAMS} from './utils/Constants.js';
-import LoanFactory from './utils/LoanFactory.js';
-import {LoanCreated, LoanTermBegin,
-  LoanBidsRejected, PeriodicRepayment,
-  ValueRedeemed, Transfer, Approval} from './utils/LoanEvents.js'
+import uuidV4 from 'uuid/v4';
 import expect from 'expect.js';
 import Random from 'random-js';
+
+import LoanFactory from './utils/LoanFactory';
+import { web3, util } from './init';
+import { PERIOD_TYPE, LOAN_STATE, DEFAULT_TX_PARAMS } from './utils/Constants';
+import { LoanCreated, LoanTermBegin, LoanBidsRejected, PeriodicRepayment, ValueRedeemed, Transfer, Approval } from './utils/LoanEvents'
 
 const Loan = artifacts.require("./LoanRegistry.sol");
 contract("Loan", (accounts) => {
