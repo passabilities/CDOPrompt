@@ -1,0 +1,47 @@
+{
+  "contract_name": "CDOLib",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "CDOLib.CDO storage"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b5b60e38061001e6000396000f300606060405263ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416636aa9eab58114603c575b600080fd5b60456004356047565b005b805473ffffffffffffffffffffffffffffffffffffffff19163373ffffffffffffffffffffffffffffffffffffffff169081178255620927c060028301819055600091825260038301602090815260408084209290925562061a8060078501819055600885019091529120555b505600a165627a7a72305820bb49023a24e3df5823f3050883de87bb647900aade3979f12f0ede33bb2bef660029",
+  "networks": {
+    "1507703988685": {
+      "events": {},
+      "links": {},
+      "address": "0x82264f3804ccf1e1874bae6f326c6996725ebfbd",
+      "updated_at": 1507704208995
+    },
+    "1507704222563": {
+      "events": {},
+      "links": {},
+      "address": "0x749685702e66393e3697311dee534eca5bb13cd4",
+      "updated_at": 1507704543401
+    },
+    "1507705316713": {
+      "events": {},
+      "links": {},
+      "address": "0xffa29522c1fec93c694062662507a91300450ea2",
+      "updated_at": 1507705396426
+    },
+    "1507705554981": {
+      "events": {},
+      "links": {},
+      "address": "0x5e17a712da782ed5f579c4638f735c7197fb9301",
+      "updated_at": 1507705661683
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1507705661683
+}

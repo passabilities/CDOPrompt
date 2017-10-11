@@ -1,7 +1,10 @@
+import uuidV4 from 'uuid/v4';
 import stringify from 'json-stable-stringify';
 import util from './Util';
 import _ from 'lodash';
 import Random from 'random-js';
+
+import { PERIOD_TYPE, LOAN_STATE, DEFAULT_TX_PARAMS } from './Constants';
 
 class LoanFactory {
   constructor(contract) {

@@ -3,6 +3,8 @@ var SafeMath = artifacts.require('./SafeMath.sol');
 var RedeemableTokenLib = artifacts.require("./RedeemableTokenLib.sol");
 var LoanLib = artifacts.require('./LoanLib.sol');
 var LoanRegistry = artifacts.require("./LoanRegistry.sol");
+var CDOLib = artifacts.require("./CDOLib.sol");
+var CDO = artifacts.require("./CDO.sol");
 var Metadata = require("../package.json");
 var semver = require('semver');
 
@@ -17,6 +19,10 @@ module.exports = function(deployer, network, accounts) {
 
   deployer.link(LoanLib, LoanRegistry);
   deployer.link(RedeemableTokenLib, LoanRegistry);
+
+  deployer.deploy(CDOLib);
+  deployer.link(CDOLib, CDO);
+  deployer.deploy(CDO);
 
   let versionRegister;
   const version = {

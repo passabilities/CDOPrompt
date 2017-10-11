@@ -1,0 +1,153 @@
+{
+  "contract_name": "CDO",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "uuid",
+          "type": "bytes32"
+        },
+        {
+          "name": "loan_ids",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "create",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "uuid",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "blockNumber",
+          "type": "uint256"
+        }
+      ],
+      "name": "CDOCreated",
+      "type": "event"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b5b5b5b610213806100216000396000f300606060405263ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663655059db811461003d575b600080fd5b341561004857600080fd5b6100916004803590604460248035908101908301358060208181020160405190810160405280939291908181526020018383602002808284375094965061009395505050505050565b005b600082815260208190526040908190209073__CDOLib________________________________90636aa9eab5908390517c010000000000000000000000000000000000000000000000000000000063ffffffff8416028152600481019190915260240160006040518083038186803b151561010d57600080fd5b6102c65a03f4151561011e57600080fd5b5050508181600101908051610137929160200190610178565b507f80cdf3bbc11fd199bff327a22349ddc92c84c55ae374735cedac236f4b0fde3e834360405191825260208201526040908101905180910390a15b505050565b8280548282559060005260206000209081019282156101b5579160200282015b828111156101b55782518255602090920191600190910190610198565b5b506101c29291506101c6565b5090565b6101e491905b808211156101c257600081556001016101cc565b5090565b905600a165627a7a72305820fc4686dd69b74f1e74d0109a5012facff82b2f2900944c4fa114561953f779ec0029",
+  "networks": {
+    "1507703988685": {
+      "events": {
+        "0x80cdf3bbc11fd199bff327a22349ddc92c84c55ae374735cedac236f4b0fde3e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "CDOCreated",
+          "type": "event"
+        }
+      },
+      "links": {
+        "CDOLib": "0x82264f3804ccf1e1874bae6f326c6996725ebfbd"
+      },
+      "address": "0xbdcb487e6a33792677cac565ef9fa23b99bc18fa",
+      "updated_at": 1507704208995
+    },
+    "1507704222563": {
+      "events": {
+        "0x80cdf3bbc11fd199bff327a22349ddc92c84c55ae374735cedac236f4b0fde3e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "CDOCreated",
+          "type": "event"
+        }
+      },
+      "links": {
+        "CDOLib": "0x749685702e66393e3697311dee534eca5bb13cd4"
+      },
+      "address": "0xe45fa7324f5fdc571ce66b14a89bb1e3b108bd01",
+      "updated_at": 1507704543401
+    },
+    "1507705316713": {
+      "events": {
+        "0x80cdf3bbc11fd199bff327a22349ddc92c84c55ae374735cedac236f4b0fde3e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "CDOCreated",
+          "type": "event"
+        }
+      },
+      "links": {
+        "CDOLib": "0xffa29522c1fec93c694062662507a91300450ea2"
+      },
+      "address": "0x51376e71f602ec11ead6aace887ffc11acf0f512",
+      "updated_at": 1507705396431
+    },
+    "1507705554981": {
+      "events": {
+        "0x80cdf3bbc11fd199bff327a22349ddc92c84c55ae374735cedac236f4b0fde3e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "CDOCreated",
+          "type": "event"
+        }
+      },
+      "links": {
+        "CDOLib": "0x5e17a712da782ed5f579c4638f735c7197fb9301"
+      },
+      "address": "0x94e7c0b96e406ff34d77339bece130c329219b49",
+      "updated_at": 1507705661681
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1507705661681
+}

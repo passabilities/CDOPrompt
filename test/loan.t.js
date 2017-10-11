@@ -7,6 +7,7 @@ import LoanFactory from './utils/LoanFactory';
 import { web3, util } from './init';
 import { PERIOD_TYPE, LOAN_STATE, DEFAULT_TX_PARAMS } from './utils/Constants';
 import { LoanCreated, LoanTermBegin, LoanBidsRejected, PeriodicRepayment, ValueRedeemed, Transfer, Approval } from './utils/LoanEvents'
+import { CDOCreated } from './utils/CDOEvents'
 
 const Loan = artifacts.require("./LoanRegistry.sol");
 contract("Loan", (accounts) => {
@@ -1112,6 +1113,45 @@ contract("Loan", (accounts) => {
           await loan.transferFrom(erc20TestLoan.uuid, INVESTORS[1], INVESTORS[0],
             web3.toWei(0.3, 'ether'), { from : INVESTORS[0] });
           expect().fail("should throw error");
+        } catch (err) {
+          util.assertThrowMessage(err);
+        }
+      })
+    })
+  })
+})
+
+const CDO = artifacts.require("./CDO.sol");
+contract("CDO", (accounts) => {
+
+  let cdo;
+  let loan;
+  let loanFactory;
+
+  before(async () => {
+    cdo = await CDO.deployed();
+    loan = await Loan.deployed();
+    loanFactory = new LoanFactory(loan);
+  })
+
+  describe('CDO', () => {
+    let cdoLoans;
+
+    before(() => {
+    })
+
+    describe('#create()', () => {
+      it('should create a CDO from loans', async () => {
+        let rate = 0.04;
+        cdoLoans = _.map([1,2,3], async p => await loanFactory.generateTestLoan(accounts, web3.toWei(p, 'ether'), rate))
+        try {
+          let uuid = web3.sha3(uuidV4());
+          let result = await cdo.create(uuid, cdoLoans);
+
+          util.assertEventEquality(result.logs[0], CDOCreated({
+            uuid,
+            blockNumber: result.receipt.blockNumber
+          }))
         } catch (err) {
           util.assertThrowMessage(err);
         }
