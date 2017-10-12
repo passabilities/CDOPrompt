@@ -60,4 +60,16 @@ contract CDO {
     cdos[uuid].mezzanineTranche.token.redeemValue(uuid, msg.sender);
   }
 
+  function getTotalWorth(bytes32 uuid) constant returns (uint) {
+    return cdos[uuid].totalWorth;
+  }
+
+  function getSeniorAmountRepaid(bytes32 uuid) returns (uint) {
+    return cdos[uuid].seniorTranche.token.totalValueAccrued;
+  }
+
+  function getMezzanineAmountRepaid(bytes32 uuid) returns (uint) {
+    return cdos[uuid].mezzanineTranche.token.totalValueAccrued;
+  }
+
 }

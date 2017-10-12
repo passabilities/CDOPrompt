@@ -1680,8 +1680,620 @@
       },
       "address": "0x08f8f124adddd13c6282b7dd573bb2fde45f23f3",
       "updated_at": 1507705661678
+    },
+    "1507835794002": {
+      "events": {
+        "0x9bc810a6d38726abc8f5936348642462ac646599f8688c0c2b2ea05f4ccaa225": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "Transfer",
+          "type": "event"
+        },
+        "0xe4401cf33c0f985085feb7609a8ea03e3b318a9b120c8a70e02475a1f126ab41": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "spender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "Approval",
+          "type": "event"
+        },
+        "0x3d399b127c981d48bf54c1b38051c005657cfeaa390e9f45bd98692aef6897d3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "investor",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "recipient",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "ValueRedeemed",
+          "type": "event"
+        },
+        "0x49b6caa9eddf0b790c8a9c8c5f71772369318159814e0320e5aaf6d2f516bb22": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "PeriodicRepayment",
+          "type": "event"
+        },
+        "0x5cfe4187e5fd95a5f8f8ab667b0c976706cda4034f5c6d561a76ed97e0448398": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "LoanTermBegin",
+          "type": "event"
+        },
+        "0x0af07b90cabf632cb57a7f510b2dcdaf41bdd60350054a0a02cacdc8d840ec47": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "LoanBidsRejected",
+          "type": "event"
+        },
+        "0xa0755887a25eb0a7fadc1b4e3982db5663d49089fc2de7b2f2ab1f9168ad71c6": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "attestor",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "LoanCreated",
+          "type": "event"
+        }
+      },
+      "links": {
+        "LoanLib": "0x1b283975fe64ab2b925c450e01b52a2bc04b37f3",
+        "RedeemableTokenLib": "0x3a7523fa3eec1980b69f284396fbb103ce16608c"
+      },
+      "address": "0x677d10931f33095f8e4fef6437d1146975d1a273",
+      "updated_at": 1507836020216
+    },
+    "1507839368959": {
+      "events": {
+        "0x9bc810a6d38726abc8f5936348642462ac646599f8688c0c2b2ea05f4ccaa225": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "Transfer",
+          "type": "event"
+        },
+        "0xe4401cf33c0f985085feb7609a8ea03e3b318a9b120c8a70e02475a1f126ab41": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "spender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "Approval",
+          "type": "event"
+        },
+        "0x3d399b127c981d48bf54c1b38051c005657cfeaa390e9f45bd98692aef6897d3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "investor",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "recipient",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "ValueRedeemed",
+          "type": "event"
+        },
+        "0x49b6caa9eddf0b790c8a9c8c5f71772369318159814e0320e5aaf6d2f516bb22": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "PeriodicRepayment",
+          "type": "event"
+        },
+        "0x5cfe4187e5fd95a5f8f8ab667b0c976706cda4034f5c6d561a76ed97e0448398": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "LoanTermBegin",
+          "type": "event"
+        },
+        "0x0af07b90cabf632cb57a7f510b2dcdaf41bdd60350054a0a02cacdc8d840ec47": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "LoanBidsRejected",
+          "type": "event"
+        },
+        "0xa0755887a25eb0a7fadc1b4e3982db5663d49089fc2de7b2f2ab1f9168ad71c6": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "attestor",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "LoanCreated",
+          "type": "event"
+        }
+      },
+      "links": {
+        "LoanLib": "0xf2e7ac9ff8e7bd93199b684b05489b5f0015dc40",
+        "RedeemableTokenLib": "0xcd0de3fd2a25362534bb31a40f500c2c2e296659"
+      },
+      "address": "0x913fff691674c3fc7ba436202a01afb27ac3aaf6",
+      "updated_at": 1507839430944
+    },
+    "1507839629401": {
+      "events": {
+        "0x9bc810a6d38726abc8f5936348642462ac646599f8688c0c2b2ea05f4ccaa225": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "to",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "Transfer",
+          "type": "event"
+        },
+        "0xe4401cf33c0f985085feb7609a8ea03e3b318a9b120c8a70e02475a1f126ab41": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "spender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "Approval",
+          "type": "event"
+        },
+        "0x3d399b127c981d48bf54c1b38051c005657cfeaa390e9f45bd98692aef6897d3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "investor",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "recipient",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "ValueRedeemed",
+          "type": "event"
+        },
+        "0x49b6caa9eddf0b790c8a9c8c5f71772369318159814e0320e5aaf6d2f516bb22": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "PeriodicRepayment",
+          "type": "event"
+        },
+        "0x5cfe4187e5fd95a5f8f8ab667b0c976706cda4034f5c6d561a76ed97e0448398": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "LoanTermBegin",
+          "type": "event"
+        },
+        "0x0af07b90cabf632cb57a7f510b2dcdaf41bdd60350054a0a02cacdc8d840ec47": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "LoanBidsRejected",
+          "type": "event"
+        },
+        "0xa0755887a25eb0a7fadc1b4e3982db5663d49089fc2de7b2f2ab1f9168ad71c6": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "uuid",
+              "type": "bytes32"
+            },
+            {
+              "indexed": true,
+              "name": "borrower",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "attestor",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "blockNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "LoanCreated",
+          "type": "event"
+        }
+      },
+      "links": {
+        "LoanLib": "0x9cf22464a91fc099b6bf7d8075e33930e71cf568",
+        "RedeemableTokenLib": "0x755121ffa521432230d605d5d4f145e3c99e15bb"
+      },
+      "address": "0x701bb33e0b721eeece934f3e3763fcadca704a97",
+      "updated_at": 1507839814739
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1507834030461
+  "updated_at": 1507839814739
 }

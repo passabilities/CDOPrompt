@@ -1142,7 +1142,8 @@ contract("CDO", (accounts) => {
 
     describe('#create()', () => {
       it('should create a CDO from loans', async () => {
-        let rate = 0.04;
+        const rate = 0.04;
+        const totalWorth = web3.toBigNumber(web3.toWei(6.24, 'ether'))
         cdoLoans = _.map([1,2,3], async p => await loanFactory.generateTestLoan(accounts, web3.toWei(p, 'ether'), rate))
         try {
           let uuid = web3.sha3(uuidV4());
@@ -1152,6 +1153,42 @@ contract("CDO", (accounts) => {
             uuid,
             blockNumber: result.receipt.blockNumber
           }))
+
+          let cdoWorth = await cdo.getTotalWorth.call(uuid)
+          console.log(totalWorth)
+          console.log(cdoWorth)
+          expect(totalWorth.equals(cdoWorth)).to.be(true)
+        } catch (err) {
+          util.assertThrowMessage(err);
+        }
+      })
+
+      it('should payout senior tranche', async () => {
+        const rate = 0.04;
+        const totalWorth = web3.toBigNumber(web3.toWei(6.24, 'ether'))
+        const repayment = web3.toWei(1, 'ether')
+        cdoLoans = _.map([1,2,3], async p => await loanFactory.generateTestLoan(accounts, web3.toWei(p, 'ether'), rate))
+        try {
+          let uuid = web3.sha3(uuidV4());
+          let result = await cdo.create(uuid, cdoLoans);
+
+          util.assertEventEquality(result.logs[0], CDOCreated({
+            uuid,
+            blockNumber: result.receipt.blockNumber
+          }))
+
+          await cdo.repayment(uuid,
+            { value: repayment })
+
+          let seniorRepaid = await cdo.getSeniorAmountRepaid.call(uuid)
+            .then(console.log)
+            .except(console.log)
+          // let seniorRepaid = await cdo.getSeniorAmountRepaid.call(uuid)
+          // let mezzanineRepaid = await cdo.getMezzanineAmountRepaid.call(uuid)
+          // console.log(web3.toBigNumber(repayment))
+          // console.log(seniorRepaid)
+          // expect(web3.toBigNumber(repayment).equals(seniorRepaid))
+          // expect(web3.toBigNumber(0).equals(mezzanineRepaid))
         } catch (err) {
           util.assertThrowMessage(err);
         }

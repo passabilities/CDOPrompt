@@ -22,6 +22,7 @@ module.exports = function(deployer, network, accounts) {
 
   deployer.deploy(CDOLib);
   deployer.link(CDOLib, CDO);
+  deployer.link(RedeemableTokenLib, CDO);
   deployer.deploy(CDO);
 
   let versionRegister;
