@@ -3,6 +3,7 @@ import stringify from 'json-stable-stringify';
 import util from './Util';
 import _ from 'lodash';
 import Random from 'random-js';
+import BigNumber from 'bignumber.js';
 
 import { PERIOD_TYPE, LOAN_STATE, DEFAULT_TX_PARAMS } from './Constants';
 
@@ -97,15 +98,21 @@ class LoanFactory {
       defaultRisk: web3.toWei(0.73, 'ether')
     };
 
+    const etherAmount = new BigNumber(principal).dividedBy(10**18);
+    const etherAttestorFee = 0.001;
+
     const submittedBids = [{
       bidder: accounts[0],
-      amount: 2,
+      amount: etherAmount.times(2),
       minInterestRate: interestRate
     }];
     const acceptedBids = [{
       bidder: accounts[0],
-      amount: 1.001
+      amount: etherAmount.plus(etherAttestorFee)
     }];
+
+    console.log(submittedBids[0].amount);
+    console.log(acceptedBids[0].amount);
 
     await this.generateAcceptedStateLoan(loanData, submittedBids, acceptedBids);
 
