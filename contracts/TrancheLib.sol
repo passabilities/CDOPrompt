@@ -11,12 +11,7 @@ library TrancheLib {
 
   struct Tranche {
     RedeemableTokenLib.Accounting token;
-    uint intrestRate;
-  }
-
-  struct TrancheData {
-    uint totalSupply;
-    uint intrestRate;
+    uint interestRate;
   }
 
   function repay(Tranche storage self, uint amount) {

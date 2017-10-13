@@ -1,0 +1,44 @@
+{
+  "contract_name": "TrancheLib",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "TrancheLib.Tranche storage"
+        }
+      ],
+      "name": "getAmountRepaid",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "TrancheLib.Tranche storage"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "repay",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b5b60ec8061001e6000396000f300606060405263ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166338f92a1f811460465780636b1ed96a146061575b600080fd5b604f600435606f565b60405190815260200160405180910390f35b606d600435602435607a565b005b60038101545b919050565b6003820154608d908263ffffffff609716565b60038301555b5050565b600082820160a68482101560b1565b8091505b5092915050565b80151560bc57600080fd5b5b505600a165627a7a72305820b6c41b2bd61076b4e4ac59cb276c8a5157aade71c142a24df4c0fac3b95532440029",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1507893773986
+}

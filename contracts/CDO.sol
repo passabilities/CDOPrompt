@@ -20,32 +20,41 @@ contract CDO {
   mapping (bytes32 => CDOLib.CDO) cdos;
   LoanRegistry loanRegistry;
   uint totalTrancheSupply;
-  TrancheLib.TrancheData[] trancheData;
+  uint[] trancheSupply;
 
   function CDO(address loanRegistryAddress) {
     loanRegistry = LoanRegistry(loanRegistryAddress);
 
     totalTrancheSupply = 1000000;
-    trancheData = [
-      TrancheLib.TrancheData(600000),
-      TrancheLib.TrancheData(400000)
-    ]
+    trancheSupply = [ 600000, 400000 ];
   }
 
   function create(bytes32 uuid, bytes32[] loan_ids) {
+    uint i;
+    uint j;
     CDOLib.CDO cdo = cdos[uuid];
+    cdo.loan_ids = loan_ids;
 
     // Transfer all loan investors' tokens to CDO contract
-    for(uint i = 0; i < loan_ids.length; i++) {
-      bytes32 id = loan_id[i];
+    for(i = 0; i < loan_ids.length; i++) {
+      bytes32 id = loan_ids[i];
 
-      for(uint j = 0; j < loanRegistry.getNubBids(id); j++) {
-        var (bidder, amount, rate) = loanRegistry.getBidByIndex(j);
+      for(j = 0; j < loanRegistry.getNumBids(id); j++) {
+        var (bidder, amount, rate) = loanRegistry.getBidByIndex(id, j);
         loanRegistry.transferFrom(id, bidder, address(this), amount);
       }
 
     }
-    cdo.initialize(loan_ids, trancheData);
+
+    // Initialize each tranche
+    cdo.tranches.length = trancheSupply.length;
+    for(i = 0; i < trancheSupply.length; i++) {
+      uint supply = trancheSupply[i];
+      cdo.tranches[i].token.totalSupply = supply;
+      cdo.tranches[i].token.balances[msg.sender] = supply;
+
+      cdo.tranches[i].interestRate = 0;
+    }
 
     CDOCreated(uuid, block.number);
   }
@@ -58,7 +67,7 @@ contract CDO {
       bytes32 id = cdo.loan_ids[i];
 
       uint principal = loanRegistry.getPrincipal(id);
-      uint rate = loanRegistry.getIntrestRate(id);
+      uint rate = loanRegistry.getInterestRate(id);
 
       worth = worth
         .add(principal)
@@ -76,6 +85,7 @@ contract CDO {
   function redeemValue(bytes32 uuid) {
     CDOLib.CDO cdo = cdos[uuid];
 
+    uint i = 0;
     while(i++ < cdo.tranches.length) {
       cdo.tranches[i].token.redeemValue(uuid, msg.sender);
     }
