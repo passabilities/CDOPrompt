@@ -10,6 +10,7 @@ contract CDO {
   using SafeMath for uint;
   using RedeemableTokenLib for RedeemableTokenLib.Accounting;
   using CDOLib for CDOLib.CDO;
+  using TrancheLib for TrancheLib.Tranche;
 
   event CDOCreated(
     bytes32 uuid,
@@ -71,47 +72,41 @@ contract CDO {
     return getTotalWorth(uuid).mul(cdos[uuid].tranches[index].token.totalSupply).div(totalTrancheSupply);
   }
 
-  function repayment(bytes32 uuid) payable {
+  // Redeem investor's share for each tranche
+  function redeemValue(bytes32 uuid) {
     CDOLib.CDO cdo = cdos[uuid];
 
-    uint amountLeft = cdo.seniorTranche.totalWorth - cdo.seniorTranche.token.totalValueAccrued;
-
-    // Payout the senior tranche in full first.
-    if(amountLeft > 0) {
-      // If sent value goes over senior total worth, pay rest to mezzanine.
-      // Otherwise, pay full amount to senior.
-      if(msg.value > amountLeft) {
-        paySeniorTranche(cdo, amountLeft);
-        payMezzanineTranche(cdo, msg.value - amountLeft);
-      } else {
-        paySeniorTranche(cdo, msg.value);
-      }
-    } else {
-      payMezzanineTranche(cdo, msg.value);
+    while(i++ < cdo.tranches.length) {
+      cdo.tranches[i].token.redeemValue(uuid, msg.sender);
     }
   }
 
-  function paySeniorTranche(CDOLib.CDO cdo, uint amount) internal {
-    cdo.seniorTranche.token.totalValueAccrued =
-      cdo.seniorTranche.token.totalValueAccrued.add(amount);
+  // Withdraw repayment value from a loan and redeem investor's share
+  function withdrawRepayment(bytes32 uuid, bytes32 loan_id) {
+    CDOLib.CDO cdo = cdos[uuid];
+
+    uint redeemable = loanRegistry.getRedeemableValue(loan_id, this);
+    loanRegistry.redeemValue(loan_id, this);
+    uint i = 0;
+    while(i++ < cdo.tranches.length && redeemable > 0) {
+      uint amountLeft = getTrancheTotalWorthByIndex(uuid, i) - cdo.tranches[i].getAmountRepaid();
+      // Go to next tranche if already paid in full
+      if(amountLeft == 0) continue;
+
+      if(redeemable > amountLeft) {
+        cdo.tranches[i].repay(amountLeft);
+        redeemable = redeemable.sub(amountLeft);
+      } else {
+        cdo.tranches[i].repay(redeemable);
+        redeemable = 0;
+      }
+    }
+
+    redeemValue(uuid);
   }
 
-  function payMezzanineTranche(CDOLib.CDO cdo, uint amount) internal {
-    cdo.seniorTranche.token.totalValueAccrued =
-      cdo.seniorTranche.token.totalValueAccrued.add(amount);
-  }
-
-  function redeemInvestment(bytes32 uuid) {
-    cdos[uuid].seniorTranche.token.redeemValue(uuid, msg.sender);
-    cdos[uuid].mezzanineTranche.token.redeemValue(uuid, msg.sender);
-  }
-
-  function getSeniorAmountRepaid(bytes32 uuid) returns (uint) {
-    return cdos[uuid].seniorTranche.token.totalValueAccrued;
-  }
-
-  function getMezzanineAmountRepaid(bytes32 uuid) returns (uint) {
-    return cdos[uuid].mezzanineTranche.token.totalValueAccrued;
+  function getTrancheAmountRepaidByIndex(bytes32 uuid, uint index) returns (uint) {
+    return cdos[uuid].tranches[index].getAmountRepaid();
   }
 
 }

@@ -19,4 +19,12 @@ library TrancheLib {
     uint intrestRate;
   }
 
+  function repay(Tranche storage self, uint amount) {
+    self.token.totalValueAccrued = self.token.totalValueAccrued.add(amount);
+  }
+
+  function getAmountRepaid(Tranche storage self) returns (uint) {
+    return self.token.totalValueAccrued;
+  }
+
 }
