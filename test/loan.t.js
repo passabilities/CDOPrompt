@@ -1135,7 +1135,7 @@ contract("CDO", (accounts) => {
   })
 
   describe('CDO', () => {
-    let cdoLoans;
+    let cdoLoanIds;
 
     before(() => {
     })
@@ -1144,10 +1144,17 @@ contract("CDO", (accounts) => {
       it('should create a CDO from loans', async () => {
         const rate = 0.04;
         const totalWorth = web3.toBigNumber(web3.toWei(6.24, 'ether'))
-        cdoLoans = await Promise.all(_.map([1,2,3], p => loanFactory.generateTestLoan(accounts, web3.toWei(p, 'ether'), rate).uuid))
+
+        let ps = _.map([1,2,3], p => loanFactory.generateTestLoan(accounts, web3.toWei(p, 'ether'), rate))
+        // Promise.all(ps).then(console.log).catch(console.log)
+        cdoLoanIds = await Promise.all(ps)
+        console.log(cdoLoanIds)
+        cdoLoanIds = _.map(cdoLoanIds, 'uuid')
+        console.log(cdoLoanIds)
+
         try {
           let uuid = web3.sha3(uuidV4());
-          let result = await cdo.create(uuid, cdoLoans);
+          let result = await cdo.create(uuid, cdoLoanIds);
 
           util.assertEventEquality(result.logs[0], CDOCreated({
             uuid,
@@ -1163,36 +1170,35 @@ contract("CDO", (accounts) => {
         }
       })
 
-      // it('should payout senior tranche', async () => {
-      //   const rate = 0.04;
-      //   const totalWorth = web3.toBigNumber(web3.toWei(6.24, 'ether'))
-      //   const repayment = web3.toWei(1, 'ether')
-      //   cdoLoans = _.map([1,2,3], async p => await loanFactory.generateTestLoan(accounts, web3.toWei(p, 'ether'), rate))
-      //   try {
-      //     let uuid = web3.sha3(uuidV4());
-      //     let result = await cdo.create(uuid, cdoLoans);
-      //
-      //     util.assertEventEquality(result.logs[0], CDOCreated({
-      //       uuid,
-      //       blockNumber: result.receipt.blockNumber
-      //     }))
-      //
-      //     await cdo.repayment(uuid,
-      //       { value: repayment })
-      //
-      //     let seniorRepaid = await cdo.getSeniorAmountRepaid.call(uuid)
-      //       .then(console.log)
-      //       .except(console.log)
-      //     // let seniorRepaid = await cdo.getSeniorAmountRepaid.call(uuid)
-      //     // let mezzanineRepaid = await cdo.getMezzanineAmountRepaid.call(uuid)
-      //     // console.log(web3.toBigNumber(repayment))
-      //     // console.log(seniorRepaid)
-      //     // expect(web3.toBigNumber(repayment).equals(seniorRepaid))
-      //     // expect(web3.toBigNumber(0).equals(mezzanineRepaid))
-      //   } catch (err) {
-      //     util.assertThrowMessage(err);
-      //   }
-      // })
+      it('should payout senior tranche', async () => {
+        const rate = 0.04;
+        const totalWorth = web3.toBigNumber(web3.toWei(6.24, 'ether'))
+        const repayment = web3.toWei(1, 'ether')
+
+        let ps = _.map([1,2,3], p => loanFactory.generateTestLoan(accounts, web3.toWei(p, 'ether'), rate))
+        // Promise.all(ps).then(console.log).catch(console.log)
+        cdoLoanIds = await Promise.all(ps)
+        console.log(cdoLoanIds)
+        cdoLoanIds = _.map(cdoLoanIds, 'uuid')
+        console.log(cdoLoanIds)
+
+        try {
+          let uuid = web3.sha3(uuidV4());
+          let result = await cdo.create(uuid, cdoLoanIds);
+
+          util.assertEventEquality(result.logs[0], CDOCreated({
+            uuid,
+            blockNumber: result.receipt.blockNumber
+          }))
+
+          const result = await loan.periodicRepayment(cdoLoanIds[0],
+            { value: web3.toWei(1, 'ether') })
+
+          cdo.withdrawRepayment(uuid, cdoLoanIds[0])
+        } catch (err) {
+          util.assertThrowMessage(err);
+        }
+      })
     })
   })
 })
