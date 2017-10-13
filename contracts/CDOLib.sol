@@ -18,17 +18,13 @@ library CDOLib {
   }
 
   struct CDO {
-    address owner;
     bytes32[] loan_ids;
     Tranche seniorTranche;
     Tranche mezzanineTranche;
-    uint totalWorth;
   }
 
   // Save data and initialize tranches
-  function initialize(CDO storage self, uint totalWorth, bytes32[] loan_ids) {
-    self.owner = msg.sender;
-    self.totalWorth = totalWorth;
+  function initialize(CDO storage self, bytes32[] loan_ids) {
     self.loan_ids = loan_ids;
 
     self.seniorTranche.totalWorth = totalWorth.mul(6).div(10); // 60%

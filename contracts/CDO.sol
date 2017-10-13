@@ -25,20 +25,37 @@ contract CDO {
   function create(bytes32 uuid, bytes32[] loan_ids) {
     CDOLib.CDO cdo = cdos[uuid];
 
-    // Determine CDO total worth
-    //   * total worth = loan principals + loan rates
-    uint totalWorth = 0;
+    // Transfer all loan investors' tokens to CDO contract
     for(uint i = 0; i < loan_ids.length; i++) {
-      uint principal = loanRegistry.getPrincipal(loan_ids[i]);
-      uint rate = loanRegistry.getIntrestRate(loan_ids[i]);
+      bytes32 id = loan_id[i];
 
-      totalWorth = totalWorth
+      for(uint j = 0; j < loanRegistry.getNubBids(id); j++) {
+        var (bidder, amount, rate) = loanRegistry.getBidByIndex(j);
+        loanRegistry.transferFrom(id, bidder, address(this), amount);
+      }
+
+    }
+    cdo.initialize(loan_ids);
+
+    CDOCreated(uuid, block.number);
+  }
+
+  function getTotalWorth(bytes32 uuid) constant returns (uint) {
+    CDOLib.CDO cdo = cdos[uuid];
+    uint worth = 0;
+
+    for(uint i = 0; i < cdo.loan_ids.length; i++) {
+      bytes32 id = cdo.loan_ids[i];
+
+      uint principal = loanRegistry.getPrincipal(id);
+      uint rate = loanRegistry.getIntrestRate(id);
+
+      worth = worth
         .add(principal)
         .add(principal.mul(rate));
     }
-    cdo.initialize(totalWorth, loan_ids);
 
-    CDOCreated(uuid, block.number);
+    return worth;
   }
 
   function repayment(bytes32 uuid) payable {
@@ -74,10 +91,6 @@ contract CDO {
   function redeemInvestment(bytes32 uuid) {
     cdos[uuid].seniorTranche.token.redeemValue(uuid, msg.sender);
     cdos[uuid].mezzanineTranche.token.redeemValue(uuid, msg.sender);
-  }
-
-  function getTotalWorth(bytes32 uuid) constant returns (uint) {
-    return cdos[uuid].totalWorth;
   }
 
   function getSeniorAmountRepaid(bytes32 uuid) returns (uint) {
