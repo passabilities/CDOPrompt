@@ -35,17 +35,6 @@ contract CDO {
     CDOLib.CDO cdo = cdos[uuid];
     cdo.loan_ids = loan_ids;
 
-    // Transfer all loan investors' tokens to CDO contract
-    for(i = 0; i < loan_ids.length; i++) {
-      bytes32 id = loan_ids[i];
-
-      for(j = 0; j < loanRegistry.getNumBids(id); j++) {
-        var (bidder, amount, rate) = loanRegistry.getBidByIndex(id, j);
-        loanRegistry.transferFrom(id, bidder, address(this), amount);
-      }
-
-    }
-
     // Initialize each tranche
     cdo.tranches.length = trancheSupply.length;
     for(i = 0; i < trancheSupply.length; i++) {
@@ -71,7 +60,8 @@ contract CDO {
 
       worth = worth
         .add(principal)
-        .add(principal.mul(rate));
+        // Interest rate in Wei
+        .add(principal.mul(rate).div(1 ether));
     }
 
     return worth;
@@ -81,24 +71,18 @@ contract CDO {
     return getTotalWorth(uuid).mul(cdos[uuid].tranches[index].token.totalSupply).div(totalTrancheSupply);
   }
 
-  // Redeem investor's share for each tranche
-  function redeemValue(bytes32 uuid) {
-    CDOLib.CDO cdo = cdos[uuid];
-
-    uint i = 0;
-    while(i++ < cdo.tranches.length) {
-      cdo.tranches[i].token.redeemValue(uuid, msg.sender);
-    }
+  function redeemTrancheValueByIndex(bytes32 uuid, uint index) {
+    cdos[uuid].tranches[index].token.redeemValue(uuid, msg.sender);
   }
 
-  // Withdraw repayment value from a loan and redeem investor's share
+  // Withdraw repayment value from a loan
   function withdrawRepayment(bytes32 uuid, bytes32 loan_id) {
     CDOLib.CDO cdo = cdos[uuid];
 
     uint redeemable = loanRegistry.getRedeemableValue(loan_id, this);
     loanRegistry.redeemValue(loan_id, this);
     uint i = 0;
-    while(i++ < cdo.tranches.length && redeemable > 0) {
+    while(i < cdo.tranches.length && redeemable > 0) {
       uint amountLeft = getTrancheTotalWorthByIndex(uuid, i) - cdo.tranches[i].getAmountRepaid();
       // Go to next tranche if already paid in full
       if(amountLeft == 0) continue;
@@ -110,9 +94,9 @@ contract CDO {
         cdo.tranches[i].repay(redeemable);
         redeemable = 0;
       }
-    }
 
-    redeemValue(uuid);
+      i++;
+    }
   }
 
   function getTrancheAmountRepaidByIndex(bytes32 uuid, uint index) returns (uint) {

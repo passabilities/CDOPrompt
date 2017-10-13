@@ -111,9 +111,6 @@ class LoanFactory {
       amount: etherAmount.plus(etherAttestorFee)
     }];
 
-    console.log(submittedBids[0].amount);
-    console.log(acceptedBids[0].amount);
-
     await this.generateAcceptedStateLoan(loanData, submittedBids, acceptedBids);
 
     return loanData;

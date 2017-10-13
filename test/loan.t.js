@@ -1135,38 +1135,31 @@ contract("CDO", (accounts) => {
   })
 
   describe('CDO', () => {
+    const rate = 0.2;
+    const totalWorth = web3.toBigNumber(web3.toWei(7.2, 'ether'))
+    let uuid;
     let cdoLoanIds;
 
-    before(() => {
+    before(async () => {
+      let one = await loanFactory.generateTestLoan(accounts, web3.toWei(1, 'ether'), rate)
+      let two = await loanFactory.generateTestLoan(accounts, web3.toWei(2, 'ether'), rate)
+      let three = await loanFactory.generateTestLoan(accounts, web3.toWei(3, 'ether'), rate)
+      cdoLoanIds = _.map([one, two, three], 'uuid')
+
+      // Transfer investor tokens to CDO contract
+      // Not sure if this is right place to do transfer
+      await loan.transfer(one.uuid, cdo.address, await loan.balanceOf.call(one.uuid, accounts[0]), { from: accounts[0] })
+      await loan.transfer(two.uuid, cdo.address, await loan.balanceOf.call(two.uuid, accounts[0]), { from: accounts[0] })
+      await loan.transfer(three.uuid, cdo.address, await loan.balanceOf.call(three.uuid, accounts[0]), { from: accounts[0] })
+
+      uuid = web3.sha3(uuidV4())
+      await cdo.create(uuid, cdoLoanIds, { from: accounts[1] })
     })
 
     describe('#create()', () => {
       it('should create a CDO from loans', async () => {
-        const rate = 0.04;
-        const totalWorth = web3.toBigNumber(web3.toWei(6.24, 'ether'))
-
-        // let ps = _.map([1,2,3], p => loanFactory.generateTestLoan(accounts, web3.toWei(p, 'ether'), rate))
-        let one = await loanFactory.generateTestLoan(accounts, web3.toWei(1, 'ether'), rate);
-        let two = await loanFactory.generateTestLoan(accounts, web3.toWei(2, 'ether'), rate);
-        let three = await loanFactory.generateTestLoan(accounts, web3.toWei(3, 'ether'), rate);
-
-        // Promise.all(ps).then(console.log).catch(console.log)
-        // cdoLoanIds = await Promise.each(ps)
-        cdoLoanIds = _.map([one, two, three], 'uuid')
-        console.log(cdoLoanIds  )
-
         try {
-          let uuid = web3.sha3(uuidV4());
-          let result = await cdo.create(uuid, cdoLoanIds);
-
-          util.assertEventEquality(result.logs[0], CDOCreated({
-            uuid,
-            blockNumber: result.receipt.blockNumber
-          }))
-
           let cdoWorth = await cdo.getTotalWorth.call(uuid)
-          console.log(totalWorth)
-          console.log(cdoWorth)
           expect(totalWorth.equals(cdoWorth)).to.be(true)
         } catch (err) {
           util.assertThrowMessage(err);
@@ -1174,30 +1167,21 @@ contract("CDO", (accounts) => {
       })
 
       it('should payout senior tranche', async () => {
-        const rate = 0.04;
-        const totalWorth = web3.toBigNumber(web3.toWei(6.24, 'ether'))
-        const repayment = web3.toWei(1, 'ether')
-
-        let ps = _.map([1,2,3], p => loanFactory.generateTestLoan(accounts, web3.toWei(p, 'ether'), rate))
-        // Promise.all(ps).then(console.log).catch(console.log)
-        cdoLoanIds = await Promise.all(ps)
-        console.log(cdoLoanIds)
-        cdoLoanIds = _.map(cdoLoanIds, 'uuid')
-        console.log(cdoLoanIds)
+        const repayment = web3.toWei(0.2, 'ether')
 
         try {
-          let uuid = web3.sha3(uuidV4());
-          let result = await cdo.create(uuid, cdoLoanIds);
+          await loan.periodicRepayment(cdoLoanIds[0],
+            { value: repayment })
 
-          util.assertEventEquality(result.logs[0], CDOCreated({
-            uuid,
-            blockNumber: result.receipt.blockNumber
-          }))
+          await cdo.withdrawRepayment(uuid, cdoLoanIds[0], { from: accounts[0] })
+          let repaid = await cdo.getTrancheAmountRepaidByIndex.call(uuid, 0)
+          expect(repaid.equals(web3.toBigNumber(repayment))).to.be(true)
 
-          result = await loan.periodicRepayment(cdoLoanIds[0],
-            { value: web3.toWei(1, 'ether') })
-
-          cdo.withdrawRepayment(uuid, cdoLoanIds[0])
+          console.log(await loan.balanceOf.call(cdoLoanIds[0], cdo.address))
+          console.log(await loan.getRedeemableValue.call(cdoLoanIds[0], cdo.address))
+          // console.log(web3.eth.getBalance(accounts[1]))
+          await cdo.redeemTrancheValueByIndex(uuid, 0, { from: accounts[1] })
+          // console.log(web3.eth.getBalance(accounts[1]))
         } catch (err) {
           util.assertThrowMessage(err);
         }
