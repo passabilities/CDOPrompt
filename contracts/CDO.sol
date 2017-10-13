@@ -2,6 +2,7 @@ pragma solidity ^0.4.8;
 
 import "./CDOLib.sol";
 import "./RedeemableTokenLib.sol";
+import "./LoanRegistry.sol";
 
 contract CDO {
 
@@ -15,12 +16,27 @@ contract CDO {
   );
 
   mapping (bytes32 => CDOLib.CDO) cdos;
+  LoanRegistry loanRegistry;
 
-  function CDO() {
+  function CDO(address loanRegistryAddress) {
+    loanRegistry = LoanRegistry(loanRegistryAddress);
   }
 
   function create(bytes32 uuid, bytes32[] loan_ids) {
-    cdos[uuid].initialize(loan_ids);
+    CDOLib.CDO cdo = cdos[uuid];
+
+    // Determine CDO total worth
+    //   * total worth = loan principals + loan rates
+    uint totalWorth = 0;
+    for(uint i = 0; i < loan_ids.length; i++) {
+      uint principal = loanRegistry.getPrincipal(loan_ids[i]);
+      uint rate = loanRegistry.getIntrestRate(loan_ids[i]);
+
+      totalWorth = totalWorth
+        .add(principal)
+        .add(principal.mul(rate));
+    }
+    cdo.initialize(totalWorth, loan_ids);
 
     CDOCreated(uuid, block.number);
   }
