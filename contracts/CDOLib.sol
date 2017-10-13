@@ -3,38 +3,32 @@ pragma solidity ^0.4.8;
 import "./SafeMath.sol";
 import "./RedeemableTokenLib.sol";
 import "./LoanRegistry.sol";
+import "./TrancheLib.sol";
 
 library CDOLib {
 
   using SafeMath for uint;
   using RedeemableTokenLib for RedeemableTokenLib.Accounting;
-
-  uint constant seniorSupply = 600000;
-  uint constant mezzanineSupply = 400000;
-
-  struct Tranche {
-    RedeemableTokenLib.Accounting token;
-    uint totalWorth;
-  }
+  using TrancheLib for TrancheLib.Tranche;
 
   struct CDO {
     bytes32[] loan_ids;
-    Tranche seniorTranche;
-    Tranche mezzanineTranche;
+    TrancheLib.Tranche[] tranches;
   }
 
   // Save data and initialize tranches
-  function initialize(CDO storage self, bytes32[] loan_ids) {
+  function initialize(CDO storage self, bytes32[] loan_ids, TrancheLib.TrancheData[] trancheData) {
     self.loan_ids = loan_ids;
 
-    self.seniorTranche.totalWorth = totalWorth.mul(6).div(10); // 60%
-    self.mezzanineTranche.totalWorth = totalWorth.mul(4).div(10); // 40%
+    // Initialize each tranche
+    self.tranches.length = trancheData.length;
+    for(uint i = 0; i < trancheData.length; i++) {
+      uint supply = trancheData[i].totalSupply
+      self.tranches[i].token.totalSupply = supply;
+      self.tranches[i].token.balances[msg.sender] = supply;
 
-    self.seniorTranche.token.totalSupply = seniorSupply;
-    self.seniorTranche.token.balances[msg.sender] = seniorSupply;
-
-    self.mezzanineTranche.token.totalSupply = mezzanineSupply;
-    self.mezzanineTranche.token.balances[msg.sender] = mezzanineSupply;
+      self.tranches[i].intrestRate = trancheData[i].intrestRate;
+    }
   }
 
 }

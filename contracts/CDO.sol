@@ -1,6 +1,7 @@
 pragma solidity ^0.4.8;
 
 import "./CDOLib.sol";
+import "./TrancheLib.sol";
 import "./RedeemableTokenLib.sol";
 import "./LoanRegistry.sol";
 
@@ -17,9 +18,17 @@ contract CDO {
 
   mapping (bytes32 => CDOLib.CDO) cdos;
   LoanRegistry loanRegistry;
+  uint totalTrancheSupply;
+  TrancheLib.TrancheData[] trancheData;
 
   function CDO(address loanRegistryAddress) {
     loanRegistry = LoanRegistry(loanRegistryAddress);
+
+    totalTrancheSupply = 1000000;
+    trancheData = [
+      TrancheLib.TrancheData(600000),
+      TrancheLib.TrancheData(400000)
+    ]
   }
 
   function create(bytes32 uuid, bytes32[] loan_ids) {
@@ -35,7 +44,7 @@ contract CDO {
       }
 
     }
-    cdo.initialize(loan_ids);
+    cdo.initialize(loan_ids, trancheData);
 
     CDOCreated(uuid, block.number);
   }
@@ -56,6 +65,10 @@ contract CDO {
     }
 
     return worth;
+  }
+
+  function getTrancheTotalWorthByIndex(bytes32 uuid, uint index) constant returns (uint) {
+    return getTotalWorth(uuid).mul(cdos[uuid].tranches[index].token.totalSupply).div(totalTrancheSupply);
   }
 
   function repayment(bytes32 uuid) payable {
