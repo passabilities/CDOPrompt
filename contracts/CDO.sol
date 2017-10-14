@@ -81,6 +81,7 @@ contract CDO {
 
     uint redeemable = loanRegistry.getRedeemableValue(loan_id, this);
     loanRegistry.redeemValue(loan_id, this);
+
     uint i = 0;
     while(i < cdo.tranches.length && redeemable > 0) {
       uint amountLeft = getTrancheTotalWorthByIndex(uuid, i) - cdo.tranches[i].getAmountRepaid();
@@ -102,5 +103,7 @@ contract CDO {
   function getTrancheAmountRepaidByIndex(bytes32 uuid, uint index) returns (uint) {
     return cdos[uuid].tranches[index].getAmountRepaid();
   }
+
+  function () payable { }
 
 }

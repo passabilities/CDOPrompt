@@ -1167,21 +1167,20 @@ contract("CDO", (accounts) => {
       })
 
       it('should payout senior tranche', async () => {
-        const repayment = web3.toWei(0.2, 'ether')
+        const repayment = web3.toWei(0.5, 'ether')
 
         try {
           await loan.periodicRepayment(cdoLoanIds[0],
             { value: repayment })
 
           await cdo.withdrawRepayment(uuid, cdoLoanIds[0], { from: accounts[0] })
+
           let repaid = await cdo.getTrancheAmountRepaidByIndex.call(uuid, 0)
           expect(repaid.equals(web3.toBigNumber(repayment))).to.be(true)
 
-          console.log(await loan.balanceOf.call(cdoLoanIds[0], cdo.address))
-          console.log(await loan.getRedeemableValue.call(cdoLoanIds[0], cdo.address))
-          // console.log(web3.eth.getBalance(accounts[1]))
+          console.log(web3.eth.getBalance(accounts[1]))
           await cdo.redeemTrancheValueByIndex(uuid, 0, { from: accounts[1] })
-          // console.log(web3.eth.getBalance(accounts[1]))
+          console.log(web3.eth.getBalance(accounts[1]))
         } catch (err) {
           util.assertThrowMessage(err);
         }
