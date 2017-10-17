@@ -19,14 +19,11 @@ contract CDO {
 
   mapping (bytes32 => CDOLib.CDO) cdos;
   LoanRegistry loanRegistry;
-  uint totalTrancheSupply;
-  uint[] trancheSupply;
+  uint totalTrancheSupply = 1000000;
+  uint[] trancheSupply = [ 600000, 400000 ];
 
   function CDO(address loanRegistryAddress) {
     loanRegistry = LoanRegistry(loanRegistryAddress);
-
-    totalTrancheSupply = 1000000;
-    trancheSupply = [ 600000, 400000 ];
   }
 
   function create(bytes32 uuid, bytes32[] loan_ids) {
