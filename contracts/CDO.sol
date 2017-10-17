@@ -19,8 +19,8 @@ contract CDO {
 
   mapping (bytes32 => CDOLib.CDO) cdos;
   LoanRegistry loanRegistry;
-  uint totalTrancheSupply = 1000000;
-  uint[] trancheSupply = [ 600000, 400000 ];
+  uint public totalTrancheSupply = 1000000;
+  uint[] public trancheSupply = [ 600000, 400000 ];
 
   function CDO(address loanRegistryAddress) {
     loanRegistry = LoanRegistry(loanRegistryAddress);
@@ -60,18 +60,6 @@ contract CDO {
     CDOCreated(uuid, block.number);
   }
 
-  function getTotalWorth(bytes32 uuid) constant returns (uint) {
-    return cdos[uuid].totalWorth;
-  }
-
-  function getTrancheTotalWorthByIndex(bytes32 uuid, uint index) constant returns (uint) {
-    return getTotalWorth(uuid).mul(cdos[uuid].tranches[index].token.totalSupply).div(totalTrancheSupply);
-  }
-
-  function redeemTrancheValueByIndex(bytes32 uuid, uint index) {
-    cdos[uuid].tranches[index].token.redeemValue(uuid, msg.sender);
-  }
-
   // Withdraw repayment value from a loan
   function withdrawRepayment(bytes32 uuid, bytes32 loan_id) {
     CDOLib.CDO cdo = cdos[uuid];
@@ -97,8 +85,32 @@ contract CDO {
     }
   }
 
+  function getTotalWorth(bytes32 uuid) constant returns (uint) {
+    return cdos[uuid].totalWorth;
+  }
+
+  function getNumTranches(bytes32 uuid) constant returns (uint) {
+    return cdos[uuid].tranches.length;
+  }
+
+  function getTrancheBalanceOfByIndex(bytes32 uuid, uint index, address _owner) returns (uint) {
+    return cdos[uuid].tranches[index].token.balanceOf(_owner);
+  }
+
+  function getTrancheTotalWorthByIndex(bytes32 uuid, uint index) constant returns (uint) {
+    return getTotalWorth(uuid).mul(cdos[uuid].tranches[index].token.totalSupply).div(totalTrancheSupply);
+  }
+
   function getTrancheAmountRepaidByIndex(bytes32 uuid, uint index) returns (uint) {
     return cdos[uuid].tranches[index].getAmountRepaid();
+  }
+
+  function redeemTrancheValueByIndex(bytes32 uuid, uint index) {
+    cdos[uuid].tranches[index].token.redeemValue(uuid, msg.sender);
+  }
+
+  function getTrancheRedeemableValueByIndex(bytes32 uuid, uint index) returns (uint) {
+    cdos[uuid].tranches[index].token.getRedeemableValue(msg.sender);
   }
 
   function () payable { }

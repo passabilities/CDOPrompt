@@ -1,7 +1,7 @@
 {
   "contract_name": "CDOLib",
   "abi": [],
-  "unlinked_binary": "0x60606040523415600e57600080fd5b5b603680601c6000396000f30060606040525b600080fd00a165627a7a7230582022d402284c0337a50dce07e9a953605e69f76a2cfa24d11af930ff7dd530720b0029",
+  "unlinked_binary": "0x60606040523415600e57600080fd5b5b603680601c6000396000f30060606040525b600080fd00a165627a7a7230582064f8eadbeec5ba2d5b216cbb6112d3bf2de94f91c10ecbe301915e8a5cc2c1230029",
   "networks": {
     "1507703988685": {
       "events": {},
@@ -62,8 +62,32 @@
       "links": {},
       "address": "0x71fb2466bdecccf9d7f83fb47412cff8faa78da3",
       "updated_at": 1507927083607
+    },
+    "1507945387595": {
+      "events": {},
+      "links": {},
+      "address": "0xee0931eddc145224e146eb4b4da9d77f4361c200",
+      "updated_at": 1508271281032
+    },
+    "1508271628223": {
+      "events": {},
+      "links": {},
+      "address": "0x5ee7d5d22c25e4b8faa745af94c36238557605ca",
+      "updated_at": 1508275745782
+    },
+    "1508278808058": {
+      "events": {},
+      "links": {},
+      "address": "0x117a9e21539b88296c75620e4b489e03550ad867",
+      "updated_at": 1508279048651
+    },
+    "1508279680189": {
+      "events": {},
+      "links": {},
+      "address": "0x1891d7c967a7f4965a2ac72ef1271da43babb366",
+      "updated_at": 1508280663622
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1507927083607
+  "updated_at": 1508280663622
 }
