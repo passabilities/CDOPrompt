@@ -26,13 +26,14 @@ contract CDO {
     loanRegistry = LoanRegistry(loanRegistryAddress);
   }
 
-  function create(bytes32 uuid, bytes32[] loan_ids) {
+  function create(bytes32 uuid, bytes32[] loan_ids, uint totalWorth) {
     CDOLib.CDO cdo = cdos[uuid];
 
     require(!cdo.exists);
 
     cdo.exists = true;
     cdo.loan_ids = loan_ids;
+    cdo.totalWorth = totalWorth;
 
     // Initialize each tranche
     cdo.tranches.length = trancheSupply.length;
@@ -42,19 +43,6 @@ contract CDO {
       cdo.tranches[i].token.balances[msg.sender] = supply;
 
       cdo.tranches[i].interestRate = 0;
-    }
-
-    // Calucalte total worth
-    for(uint j = 0; j < loan_ids.length; j++) {
-      bytes32 id = loan_ids[j];
-
-      uint principal = loanRegistry.getPrincipal(id);
-      uint rate = loanRegistry.getInterestRate(id);
-
-      cdo.totalWorth = cdo.totalWorth
-        .add(principal)
-        // Interest rate in Wei
-        .add(principal.mul(rate).div(1 ether));
     }
 
     CDOCreated(uuid, block.number);

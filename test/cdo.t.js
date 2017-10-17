@@ -41,7 +41,16 @@ contract("CDO", (accounts) => {
   describe('#create()', () => {
     it('should create a CDO from loans', async () => {
       try {
-        await cdo.create(uuid, cdoLoanIds, { from: creator })
+        await cdo.create(uuid, cdoLoanIds, totalWorth, { from: creator })
+      } catch (err) {
+        util.assertThrowMessage(err);
+      }
+    })
+
+    it('should throw error on duplicate UUID', async () => {
+      try {
+        await cdo.create(uuid, cdoLoanIds, totalWorth, { from: accounts[0] })
+        expect().fail("should throw error");
       } catch (err) {
         util.assertThrowMessage(err);
       }
@@ -69,15 +78,6 @@ contract("CDO", (accounts) => {
         expect(totalWorth.equals(cdoWorth)).to.be(true)
       } catch (err) {
         util.assertThrowMessage(err)
-      }
-    })
-
-    it('should throw error on duplicate UUID', async () => {
-      try {
-        await cdo.create(uuid, cdoLoanIds, { from: accounts[0] })
-        expect().fail("should throw error");
-      } catch (err) {
-        util.assertThrowMessage(err);
       }
     })
   })
