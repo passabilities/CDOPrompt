@@ -27,14 +27,16 @@ contract CDO {
   }
 
   function create(bytes32 uuid, bytes32[] loan_ids) {
-    uint i;
-    uint j;
     CDOLib.CDO cdo = cdos[uuid];
+
+    require(!cdo.exists);
+
+    cdo.exists = true;
     cdo.loan_ids = loan_ids;
 
     // Initialize each tranche
     cdo.tranches.length = trancheSupply.length;
-    for(i = 0; i < trancheSupply.length; i++) {
+    for(uint i = 0; i < trancheSupply.length; i++) {
       uint supply = trancheSupply[i];
       cdo.tranches[i].token.totalSupply = supply;
       cdo.tranches[i].token.balances[msg.sender] = supply;
@@ -42,26 +44,24 @@ contract CDO {
       cdo.tranches[i].interestRate = 0;
     }
 
-    CDOCreated(uuid, block.number);
-  }
-
-  function getTotalWorth(bytes32 uuid) constant returns (uint) {
-    CDOLib.CDO cdo = cdos[uuid];
-    uint worth = 0;
-
-    for(uint i = 0; i < cdo.loan_ids.length; i++) {
-      bytes32 id = cdo.loan_ids[i];
+    // Calucalte total worth
+    for(uint j = 0; j < loan_ids.length; j++) {
+      bytes32 id = loan_ids[j];
 
       uint principal = loanRegistry.getPrincipal(id);
       uint rate = loanRegistry.getInterestRate(id);
 
-      worth = worth
+      cdo.totalWorth = cdo.totalWorth
         .add(principal)
         // Interest rate in Wei
         .add(principal.mul(rate).div(1 ether));
     }
 
-    return worth;
+    CDOCreated(uuid, block.number);
+  }
+
+  function getTotalWorth(bytes32 uuid) constant returns (uint) {
+    return cdos[uuid].totalWorth;
   }
 
   function getTrancheTotalWorthByIndex(bytes32 uuid, uint index) constant returns (uint) {

@@ -12,8 +12,10 @@ library CDOLib {
   using TrancheLib for TrancheLib.Tranche;
 
   struct CDO {
+    bool exists;
     bytes32[] loan_ids;
     TrancheLib.Tranche[] tranches;
+    uint totalWorth;
   }
 
 }
